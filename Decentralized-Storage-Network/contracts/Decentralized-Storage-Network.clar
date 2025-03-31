@@ -113,3 +113,30 @@
   )
 )
 
+;; Verification Mechanism for Stored Files
+(define-public (verify-file-storage 
+  (storage-id uint)
+  (verification-hash (buff 32))
+)
+  (let 
+    ((storage-entry (unwrap! (map-get? storage-entries {storage-id: storage-id}) ERR-STORAGE-NOT-FOUND))
+     (original-hash (get file-hash storage-entry))
+     (current-state (get state storage-entry))
+    )
+    
+    ;; Verification conditions
+    (asserts! (is-eq current-state STORAGE-UPLOADED) ERR-INVALID-STORAGE-STATE)
+    (asserts! (is-eq verification-hash original-hash) ERR-VERIFICATION-FAILED)
+    
+    ;; Update storage state
+    (map-set storage-entries 
+      {storage-id: storage-id}
+      (merge storage-entry {
+        state: STORAGE-VERIFIED
+      })
+    )
+    
+    (ok true)
+  )
+)
+
