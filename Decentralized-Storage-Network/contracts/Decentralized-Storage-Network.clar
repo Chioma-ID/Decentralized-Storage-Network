@@ -258,3 +258,38 @@
     (/ (* (+ base-reward verification-bonus incentive-bonus) reputation-multiplier) u100)
   )
 )
+
+;; Helper function to calculate verification success rate
+(define-read-only (calculate-success-rate
+  (successes uint)
+  (total uint)
+)
+  (if (> total u0)
+    (/ (* successes u100) total)
+    u0)
+)
+
+;; Helper function to calculate reward rate based on reputation and commitment parameters
+(define-read-only (calculate-reward-rate
+  (node-reputation {
+    total-storage-attempts: uint,
+    successful-storage-completions: uint,
+    failed-storage-tasks: uint,
+    total-data-stored: uint,
+    reputation-score: uint,
+    last-activity-block: uint,
+    verification-success-rate: uint
+  })
+  (duration-blocks uint)
+  (stake-amount uint)
+)
+  (let
+    ((base-rate u5) ;; 5% base rate
+     (duration-bonus (if (> duration-blocks u4320) u2 u0)) ;; Bonus for long-term storage (>30 days)
+     (stake-bonus (if (> stake-amount u1000) u1 u0)) ;; Bonus for higher stake
+     (reputation-bonus (/ (get reputation-score node-reputation) u50)) ;; Reputation-based bonus
+    )
+    
+    (+ base-rate duration-bonus stake-bonus reputation-bonus)
+  )
+)
