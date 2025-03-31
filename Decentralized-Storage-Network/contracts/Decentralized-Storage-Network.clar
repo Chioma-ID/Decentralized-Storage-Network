@@ -43,3 +43,27 @@
   }
 )
 
+;; Storage Node Reputation System
+(define-map storage-node-reputation
+  principal
+  {
+    total-storage-attempts: uint,
+    successful-storage-completions: uint,
+    failed-storage-tasks: uint,
+    total-data-stored: uint,
+    reputation-score: uint,
+    last-activity-block: uint,
+    verification-success-rate: uint
+  }
+)
+
+;; Storage Node Stake Tracking
+(define-map storage-node-stakes
+  principal
+  {
+    total-stake: uint,
+    active-storage-commitments: uint,
+    last-stake-block: uint
+  }
+)
+
