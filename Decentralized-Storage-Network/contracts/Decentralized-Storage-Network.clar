@@ -67,3 +67,49 @@
   }
 )
 
+;; File Access Logs
+(define-map file-access-logs
+  {storage-id: uint, accessor: principal}
+  {
+    access-timestamp: uint,
+    access-type: (string-utf8 20)
+  }
+)
+
+;; Storage Node Registration
+(define-public (register-storage-node 
+  (initial-stake uint)
+  (node-capabilities (list 5 (string-utf8 50)))
+)
+  (begin
+    ;; Validate initial stake
+    (asserts! (> initial-stake u100) ERR-INSUFFICIENT-FUNDS)
+    
+    ;; Register storage node with initial reputation
+    (map-set storage-node-reputation 
+      tx-sender
+      {
+        total-storage-attempts: u0,
+        successful-storage-completions: u0,
+        failed-storage-tasks: u0,
+        total-data-stored: u0,
+        reputation-score: u50,
+        last-activity-block: stacks-block-height,
+        verification-success-rate: u0
+      }
+    )
+    
+    ;; Track node stakes
+    (map-set storage-node-stakes 
+      tx-sender
+      {
+        total-stake: initial-stake,
+        active-storage-commitments: u0,
+        last-stake-block: stacks-block-height
+      }
+    )
+    
+    (ok true)
+  )
+)
+
