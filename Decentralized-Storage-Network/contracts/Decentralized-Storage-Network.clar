@@ -334,3 +334,23 @@
     (* size-factor encryption-factor)
   )
 )
+
+(define-read-only (get-commitment-details (commitment-id uint))
+  (map-get? storage-commitments {commitment-id: commitment-id})
+)
+
+(define-read-only (get-commitment-fulfillment-details (commitment-id uint))
+  (map-get? commitment-fulfillment {commitment-id: commitment-id})
+)
+
+(define-read-only (get-active-commitments-by-node (node principal))
+  ;; Note: In practice, this would require an indexing mechanism or custom API
+  ;; This is a placeholder for the functionality
+  (ok true)
+)
+
+(define-read-only (calculate-node-total-rewards (node principal))
+  ;; Note: In practice, this would require an indexing mechanism or custom API
+  ;; This is a placeholder for the functionality
+  (ok u0)
+)
