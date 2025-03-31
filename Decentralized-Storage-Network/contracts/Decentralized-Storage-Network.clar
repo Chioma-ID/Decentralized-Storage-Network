@@ -140,3 +140,25 @@
   )
 )
 
+;; Archiving Mechanism for Expired Storage
+(define-public (archive-storage (storage-id uint))
+  (let 
+    ((storage-entry (unwrap! (map-get? storage-entries {storage-id: storage-id}) ERR-STORAGE-NOT-FOUND))
+     (current-state (get state storage-entry))
+     (expiration-block (get expiration-block storage-entry))
+    )
+    
+    ;; Archiving conditions
+    (asserts! (>= stacks-block-height expiration-block) ERR-UNAUTHORIZED)
+    
+    ;; Update storage state
+    (map-set storage-entries 
+      {storage-id: storage-id}
+      (merge storage-entry {
+        state: STORAGE-ARCHIVED
+      })
+    )
+    
+    (ok true)
+  )
+)
