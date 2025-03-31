@@ -176,3 +176,14 @@
   (map-get? file-access-logs {storage-id: storage-id, accessor: accessor})
 )
 
+;; New Error Codes for Commitments
+(define-constant ERR-COMMITMENT-NOT-FOUND (err u109))
+(define-constant ERR-INVALID-COMMITMENT (err u110))
+(define-constant ERR-COMMITMENT-EXPIRED (err u111))
+(define-constant ERR-ALREADY-COMMITTED (err u112))
+
+;; New Commitment States
+(define-constant COMMITMENT-ACTIVE u0)
+(define-constant COMMITMENT-FULFILLED u1)
+(define-constant COMMITMENT-BREACHED u2)
+(define-constant COMMITMENT-EXPIRED u3)
