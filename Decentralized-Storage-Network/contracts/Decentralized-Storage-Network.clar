@@ -293,3 +293,44 @@
     (+ base-rate duration-bonus stake-bonus reputation-bonus)
   )
 )
+
+;; Helper function to calculate incentive multiplier
+(define-read-only (calculate-incentive-multiplier
+  (node-reputation {
+    total-storage-attempts: uint,
+    successful-storage-completions: uint,
+    failed-storage-tasks: uint,
+    total-data-stored: uint,
+    reputation-score: uint,
+    last-activity-block: uint,
+    verification-success-rate: uint
+  })
+  (storage-entry {
+    uploader: principal,
+    file-hash: (buff 32),
+    encryption-key: (optional (buff 32)),
+    file-size: uint,
+    storage-nodes: (list 10 principal),
+    state: uint,
+    upload-timestamp: uint,
+    expiration-block: uint,
+    access-control: {
+      public-access: bool,
+      allowed-principals: (list 10 principal),
+      encryption-required: bool
+    },
+    metadata: {
+      file-type: (string-utf8 50),
+      category: (string-utf8 50),
+      tags: (list 5 (string-utf8 30))
+    }
+  })
+)
+  (let
+    ((size-factor (if (> (get file-size storage-entry) u1048576) u5 u2)) ;; Higher incentive for larger files (>1MB)
+     (encryption-factor (if (get encryption-required (get access-control storage-entry)) u3 u1)) ;; Higher incentive for encrypted storage
+    )
+    
+    (* size-factor encryption-factor)
+  )
+)
