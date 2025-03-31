@@ -162,3 +162,17 @@
     (ok true)
   )
 )
+
+;; Read-only Functions for Retrieving Information
+(define-read-only (get-storage-details (storage-id uint))
+  (map-get? storage-entries {storage-id: storage-id})
+)
+
+(define-read-only (get-storage-node-reputation (node principal))
+  (map-get? storage-node-reputation node)
+)
+
+(define-read-only (get-file-access-log (storage-id uint) (accessor principal))
+  (map-get? file-access-logs {storage-id: storage-id, accessor: accessor})
+)
+
