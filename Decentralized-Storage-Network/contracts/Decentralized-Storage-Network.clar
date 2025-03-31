@@ -187,3 +187,32 @@
 (define-constant COMMITMENT-FULFILLED u1)
 (define-constant COMMITMENT-BREACHED u2)
 (define-constant COMMITMENT-EXPIRED u3)
+
+;; Storage Commitments Map
+(define-map storage-commitments
+  {commitment-id: uint}
+  {
+    storage-id: uint,
+    node: principal,
+    commit-block: uint,
+    duration-blocks: uint,
+    expiration-block: uint,
+    stake-amount: uint,
+    reward-rate: uint,
+    state: uint,
+    verification-count: uint,
+    last-verified-block: uint,
+    incentive-multiplier: uint
+  }
+)
+
+;; Commitment Fulfillment Records
+(define-map commitment-fulfillment
+  {commitment-id: uint}
+  {
+    fulfillment-block: uint,
+    rewards-earned: uint,
+    performance-score: uint,
+    stake-returned: bool
+  }
+)
